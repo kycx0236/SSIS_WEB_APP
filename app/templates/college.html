@@ -16,7 +16,7 @@
         <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success spaced-button search-button" type="submit">Search</button>
         <div class="mx-2"></div>
-        <button class="btn btn-outline-warning spaced-button add-button" type="button" id="add-student-button">Add</button>
+        <button class="btn btn-outline-warning spaced-button add-button" type="button" id="add-college-button">Add</button>
     </form>
     <br/>
     <div class="table-container" style="height: 500px; overflow: auto">
@@ -72,7 +72,7 @@
     $(document).ready(function() {
         // Add a click event listener to the "Add" button
         $("#add-college-button").click(function() {
-            window.location.href = "/college/add";
+            window.location.href = "/college/college/add";
         });
 
         // Add a click event listener to the "Delete" button to show the confirmation modal
