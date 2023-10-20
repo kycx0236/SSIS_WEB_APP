@@ -16,7 +16,7 @@
         <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success spaced-button search-button" type="submit">Search</button>
         <div class="mx-2"></div>
-        <button class="btn btn-outline-warning spaced-button add-button" type="button" id="add-college-button">Add</button>
+        <button class="btn btn-outline-warning spaced-button add-button" type="button" id="add-student-button">Add</button>
     </form>
     <br/>
     <div class="table-container" style="height: 500px; overflow: auto">
@@ -96,7 +96,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/college/delete",
+                url: "/college/college/delete",
                 headers: {
                     "X-CSRFToken": "{{ csrf_token() }}",  // Include the CSRF token in the headers
                 },

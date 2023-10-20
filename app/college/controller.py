@@ -5,7 +5,7 @@ from app.college.forms import CollegeForm
 
 headings = ("College Code", "College Name", "Options")
 
-@college_bp.route("/college")
+@college_bp.route("/college/display")
 def college_display():
     college_data = college_models.College.all()
     return render_template('college.html', headings=headings, data=college_data)
@@ -41,8 +41,8 @@ def edit_college():
 @college_bp.route("/college/delete", methods=["POST"])
 def delete_college():
     try:
-        id_number = request.form.get('id_number')
-        if college_models.College.delete(id_number):
+        college_code = request.form.get('college_code')  # Correct the variable name
+        if college_models.College.delete(college_code):
             return jsonify(success=True, message="Successfully deleted")
         else:
             return jsonify(success=False, message="Failed")
@@ -51,8 +51,9 @@ def delete_college():
         college_bp.logger.error("An error occurred: %s" % str(e))
         return jsonify(success=False, message="Internal Server Error"), 500
 
+
 @college_bp.route('/college/add', methods=['POST', 'GET'])
-def add():
+def add_college():
     form = CollegeForm(request.form)
     
     if request.method == 'POST' and form.validate():

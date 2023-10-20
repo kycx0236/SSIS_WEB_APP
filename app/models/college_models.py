@@ -7,19 +7,13 @@ logging.basicConfig(filename='app_errors.log', level=logging.ERROR)
 class College:
     def __init__(self, college_code=None, college_name=None):
         self.college_code = college_code
-        self.college_code = college_code
+        self.college_name = college_name
 
     def add(self):
-        """
-        Add a new student to the database.
-
-        Returns:
-            bool: True if the addition was successful, False otherwise.
-        """
         try:
             cursor = mysql.connection.cursor()
-            sql = "INSERT INTO students (id_number, first_name, last_name, course_code, year_, gender) VALUES (%s, %s, %s, %s, %s, %s)"
-            cursor.execute(sql, (self.id_number, self.first_name, self.last_name, self.course_code, self.year_, self.gender))
+            sql = "INSERT INTO college (college_code, college_name) VALUES (%s, %s)"
+            cursor.execute(sql, (self.college_code, self.college_name))
             mysql.connection.commit()
             return True
         except Exception as e:
