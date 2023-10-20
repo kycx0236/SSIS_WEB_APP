@@ -5,13 +5,9 @@ from app import mysql
 logging.basicConfig(filename='app_errors.log', level=logging.ERROR)
 
 class College:
-    def __init__(self, id_number=None, first_name=None, last_name=None, course_code=None, year_=None, gender=None):
-        self.id_number = id_number
-        self.first_name = first_name
-        self.last_name = last_name
-        self.course_code = course_code
-        self.year_ = year_
-        self.gender = gender
+    def __init__(self, college_code=None, college_name=None):
+        self.college_code = college_code
+        self.college_code = college_code
 
     def add(self):
         """

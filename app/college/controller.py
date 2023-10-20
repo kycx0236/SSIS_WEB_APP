@@ -38,7 +38,7 @@ def edit_college():
     return render_template("edit_college.html", form=form, row=college_data_dict)
 
 
-@college_bp.route("/edit/delete", methods=["POST"])
+@college_bp.route("/college/delete", methods=["POST"])
 def delete_college():
     try:
         id_number = request.form.get('id_number')
@@ -51,7 +51,7 @@ def delete_college():
         college_bp.logger.error("An error occurred: %s" % str(e))
         return jsonify(success=False, message="Internal Server Error"), 500
 
-@college_bp.route('/students/add', methods=['POST', 'GET'])
+@college_bp.route('/college/add', methods=['POST', 'GET'])
 def add():
     form = CollegeForm(request.form)
     
@@ -62,7 +62,7 @@ def add():
         if student_exists:
             flash("Student already exists! Please enter a unique id_number", 'error')
         else:
-            college = college_models.Students(
+            college = college_models.College(
                 college_code=check_college_code,
                 college_name=form.college_name.data
             )
@@ -74,8 +74,8 @@ def add():
 
 
 @college_bp.route('/college/search', methods=['POST'])
-def search_students():    
+def search_college():    
     query = request.form.get('search_query')
     college_data = college_models.College.search(query)
-    return render_template('students.html', headings=headings, data=college_data)
+    return render_template('college.html', headings=headings, data=college_data)
 
