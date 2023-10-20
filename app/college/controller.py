@@ -3,7 +3,7 @@ from . import college_bp
 import app.models.college_models as college_models
 from app.college.forms import CollegeForm
 
-headings = ("College Code", "College Name")
+headings = ("College Code", "College Name", "Options")
 
 @college_bp.route("/college")
 def college_display():
