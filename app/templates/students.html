@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% block title %}
+    Student Page
+{% endblock %}
+
+{% block content %}
+    {%for message in get_flashed_messages() %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>{{ message }}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+<body>
+    <form class="d-flex" role="search">
+        <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success spaced-button search-button" type="submit">Search</button>
+        <div class="mx-2"></div>
+        <button class="btn btn-outline-warning spaced-button add-button" type="button" id="add-student-button">Add</button>
+    </form>
+    <br/>
+    <div class="table-container" style="height: 500px; overflow: auto">
+        <table class="table table-dark table-striped table-hover">
+            <thead style="position: sticky; top: 0">
+                <tr class="row_head">
+                    {% for header in headings %}
+                        <th class="table-light table-header">
+                            {{ header }}
+                        </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                    <tr class="table__row">
+                        <td> {{ row[0] }} </td>
+                        <td> {{ row[1] }} </td>
+                        <td> {{ row[2] }} </td>
+                        <td> {{ row[3] }} </td>
+                        <td> {{ row[4] }} </td>
+                        <td> {{ row[5] }} </td>
+                        <td class="table__cell">
+                            <a href="{{ url_for('students.edit_student', id_number=row[0]) }}" class="btn btn-warning">Edit</a>
+                            <button type="button" class="btn btn-danger delete-button" data-id="{{ row[0] }}">Delete</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+<!-- Add a modal for delete confirmation -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Delete Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this student?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{ url_for('static', filename='javascript/JQ.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Add a click event listener to the "Add" button
+        $("#add-student-button").click(function() {
+            window.location.href = "/students/add";
+        });
+
+        // Add a click event listener to the "Delete" button to show the confirmation modal
+        $(".delete-button").click(function() {
+            const studentId = $(this).data("id");
+            console.log("Button clicked with ID: " + studentId);
+            
+            // Set the data-id attribute of the confirm delete button in the modal
+            $("#confirmDeleteButton").data("id", studentId);
+
+            // Show the confirmation modal
+            $("#deleteConfirmationModal").modal('show');
+        });
+
+        // Add a click event listener to the confirm delete button in the modal
+        $("#confirmDeleteButton").click(function() {
+            const studentId = $(this).data("id");
+
+            // Close the modal
+            $("#deleteConfirmationModal").modal('hide');
+
+            $.ajax({
+                type: "POST",
+                url: "/students/delete",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token() }}",  // Include the CSRF token in the headers
+                },
+                data: { id_number: studentId },
+                success: function(response) {
+                    console.log("Delete request successful");
+                    if (response.success) {
+                        alert("Successfully deleted");
+                        window.location.reload();  // Refresh the page after a successful delete
+                    } else {
+                        alert("Failed to delete");
+                    }
+                },
+                error: function() {
+                    console.error("Error while making the request");
+                    alert("Error while making the request");
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}

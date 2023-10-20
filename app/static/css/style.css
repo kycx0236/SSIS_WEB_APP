@@ -1,0 +1,90 @@
+h1 {
+    color: rgb(47, 79, 79);
+    font-size: 32px;
+    font-family: Montserrat;
+    font-weight: bold;
+    text-align: center;
+}
+
+p {
+    color: rgb(47, 79, 79);
+    font-size: 15px;
+    font-family: Poppins;
+    font-weight: bold;
+}
+
+h4 {
+    font-size: 14px;
+    font-family: Montserrat;
+    font-weight: bold;
+    color: #000000;
+    text-align: center;
+}
+
+body {
+    background: rgb(255, 255, 255);
+    margin: 0; /* Add this to remove default margin */
+}
+
+#demo {
+    color: black;
+    font-size: 16px;
+}
+
+.table {
+    min-width: max-content;
+    border-collapse: separate;
+    border-spacing: 0px;
+    width: 100%; /* Add this to make the table full-width */
+}
+
+.table-header {
+    text-align: left;
+    font-family: "Lato";
+    font-weight: bold;
+    background-color: #000000; /* Set the background color to match the header color */
+}
+
+.table__cell {
+    text-align: left;
+    padding: 0px;
+}
+
+button {
+    background-color: #000000;
+    color: aqua;
+}
+
+table th {
+    top: 0; /* Add this to keep the header at the top */
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+
+table td {
+    text-align: left;
+    font-size: 15px;
+    font-family: 'Montserrat';
+    padding-left: 20px;
+}
+
+
+
+.spaced-button {
+    margin-right: 5px;
+    width: 10%;
+}
+.add-button {
+    width: 20%; /* Adjust the width as needed */
+    height: 40px; /* Adjust the height as needed */
+    background-color: rgb(250, 255, 212);
+}
+
+.search-button {
+    width: 10%; /* Adjust the width as needed */
+    height: 40px; /* Adjust the height as needed */
+    background-color: rgb(194, 245, 204);
+}
+
