@@ -14,7 +14,7 @@ def college_display():
 def edit_college():
     college_code = request.args.get('college_code')
     form = CollegeForm()
-    data_college = college_models.College.get_college_id(college_code)
+    data_college = college_models.College.get_college_code(college_code)
 
     if data_college:
         college_data_dict = {
@@ -27,14 +27,14 @@ def edit_college():
         return redirect(url_for("college.college_display"))
 
     if request.method == "POST" and form.validate():
-        new_college_name = form.college_name
+        new_college_name = request.form.get('college_name')  # Corrected variable name
 
         if college_models.College.update(college_code, new_college_name):
             flash("College information updated successfully!", "success")
             return redirect(url_for("college.college_display"))
         else:
             flash("Failed to update college information.", "error")
-
+            
     return render_template("edit_college.html", form=form, row=college_data_dict)
 
 
@@ -53,14 +53,14 @@ def delete_college():
 
 
 @college_bp.route('/college/add', methods=['POST', 'GET'])
-def add():
+def add_college():
     form = CollegeForm(request.form)
     
     if request.method == 'POST' and form.validate():
         check_code = form.college_code.data
-        student_exists = college_models.College.unique_code(check_code)
+        college_exists = college_models.College.unique_code(check_code)  # Corrected import here
 
-        if student_exists:
+        if college_exists:
             flash("College already exists! Please enter a unique code", 'error')
         else:
             college = college_models.College(
@@ -74,11 +74,12 @@ def add():
     return render_template('add_college.html', form=form)
 
 
+
 @college_bp.route('/college/search', methods=['POST'])
 def search_college():
     try:
         search_query = request.form.get('searchTerm')  # Updated to 'searchTerm'
-        search_results = college_models.College.search_college(search_query)
+        search_results = college_models.College.search(search_query)
         
         if search_results:
             flash("We found it!", 'success')

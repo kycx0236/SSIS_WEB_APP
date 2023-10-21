@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-   Edit College Info
+   Edit College Page
 {% endblock %}
 
 {% block content %}
@@ -8,20 +8,19 @@
     <h1>EDIT COLLEGE INFO</h1>
     <br/><br/>
     <form class="row g-3 needs-validation" method="POST" action="{{ url_for('college.edit_college', college_code=row.college_code) }}" novalidate>
-        <!-- Include the ID number as part of the action URL -->
         <!-- College Code -->
         <div class="col-md-4">
             <label for="validationCustom01" class="form-label">College Code</label>
-            <input type="text" placeholder="e.g., College of Computer Science" class="form-control" id="validationCustom01" name="college_code" required value="{{ row.college_code }}" readonly>
+            <input type="text" placeholder="" class="form-control" id="validationCustom01" name="college_code" required value="{{ row.college_code }}" readonly>
             <div class="valid-feedback">
                 Looks good!
             </div>
             <div class="invalid-feedback">
-                Please enter your College Code.
+                Please enter your Course Code.
             </div>
         </div>
-        <!-- First Name -->
-        <div class="col-md-8">
+        <!-- College Name -->
+        <div class="col-md-4">
             <label for="validationCustom02" class="form-label">First Name</label>
             <input type="text" class="form-control" id="validationCustom02" name="college_name" required value="{{ row.college_name }}">
             <div class="valid-feedback">
@@ -31,7 +30,6 @@
                 Please enter your College Name.
             </div>
         </div>
-        
         <br/><br/>
         <!-- Checkbox for input validation -->
         <div class="col-12">
@@ -49,7 +47,7 @@
         <div class="col-12">
             <!-- Add the CSRF token input here -->
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <!-- Include a hidden input for college college_name to update the correct college -->
+            <!-- Include a hidden input for college_code to update the correct college -->
             <input type="hidden" name="college_code" value="{{ row.college_code }}">
             <button class="btn btn-outline-dark" type="submit">Submit</button>
         </div>

@@ -51,8 +51,6 @@ def edit_student():
     return render_template("edit_student.html", form=form, row=student_data_dict)
 
 
-
-
 @student_bp.route("/students/delete", methods=["POST"])
 def delete_students():
     try:

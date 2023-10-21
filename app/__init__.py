@@ -24,8 +24,8 @@ def create_app(test_config=None):
     from .students import student_bp as student_blueprint
     app.register_blueprint(student_blueprint, url_prefix='/')
     
-    from .college import college_bp
-    app.register_blueprint(college_bp)
+    from .college import college_bp as college_bluprint
+    app.register_blueprint(college_bluprint)
     """
     from .courses import courses_bp
     app.register_blueprint(courses_bp, url_prefix='/courses')

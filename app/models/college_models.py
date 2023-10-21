@@ -1,13 +1,9 @@
-# import logging
 from app import mysql
-
-# Configure the logger
-# logging.basicConfig(filename='app_errors.log', level=logging.ERROR)
 
 class College:
     def __init__(self, college_code=None, college_name=None):
         self.college_code = college_code
-        self.college_name = college_name
+        self.college_name = college_name 
 
     def add(self):
         try:
@@ -17,8 +13,8 @@ class College:
             mysql.connection.commit()
             return True
         except Exception as e:
-            # Log the error for debugging purposes
-            # logging.error(f"Error adding student: {e}")
+            # You might want to log this error for debugging purposes
+            print(f"Error adding college info: {e}")
             return False
 
     @classmethod
@@ -31,19 +27,7 @@ class College:
             return result
         except Exception as e:
             # You might want to log this error for debugging purposes
-            print(f"Error fetching all colleges: {e}")
-            return []
-
-    @classmethod
-    def search_college(cls, query):
-        try:
-            with mysql.connection.cursor() as cursor:
-                sql = "SELECT * FROM college WHERE college_code = %s OR college_name = %s"
-                cursor.execute(sql, (query, query))
-                result = cursor.fetchall()
-                return result
-        except Exception as e:
-            print(f"Error: {e}")
+            print(f"Error fetching all college info: {e}")
             return []
 
     @classmethod
@@ -55,10 +39,9 @@ class College:
             mysql.connection.commit()
             return True
         except Exception as e:
-            # You might want to log this error for debugging purposes
-            print(f"Error deleting college: {e}")
+            print(f"Error deleting course: {e}")
             return False
-
+    
     @classmethod
     def update(cls, college_code, new_college_name):
         try:
@@ -68,22 +51,36 @@ class College:
             mysql.connection.commit()
             return True
         except Exception as e:
-            # You might want to log this error for debugging purposes
             print(f"Error updating college: {e}")
             return False
-
+        
     @classmethod
     def unique_code(cls, college_code):
         cursor = mysql.connection.cursor()
         cursor.execute("SELECT college_code FROM college WHERE college_code = %s", (college_code,))
-        code = cursor.fetchone()  # Use fetchone() to get a single result
+        code = cursor.fetchone()
         cursor.close()
         return code
     
     @classmethod
-    def get_college_id(cls, college_code):
+    def get_college_code(cls, college_code):
         cursor = mysql.connection.cursor(dictionary=True)  # Set dictionary=True to return results as dictionaries
         cursor.execute("SELECT * FROM college WHERE college_code = %s", (college_code,))
         college_data = cursor.fetchone()
         cursor.close()
         return college_data
+
+    @classmethod
+    def search(cls, query):
+        try:
+            with mysql.connection.cursor() as cursor:
+                sql = "SELECT * FROM college WHERE college_code = %s OR college_name = %s"
+                cursor.execute(sql, (query, query))
+                result = cursor.fetchall()
+                return result
+        except Exception as e:
+            print(f"Error: {e}")
+            return []
+
+
+    
