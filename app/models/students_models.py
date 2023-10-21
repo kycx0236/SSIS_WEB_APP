@@ -10,12 +10,6 @@ class Students:
         self.gender = gender
 
     def add(self):
-        """
-        Add a new student to the database.
-
-        Returns:
-            bool: True if the addition was successful, False otherwise.
-        """
         try:
             cursor = mysql.connection.cursor()
             sql = "INSERT INTO students (id_number, first_name, last_name, course_code, year_, gender) VALUES (%s, %s, %s, %s, %s, %s)"

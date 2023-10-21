@@ -22,8 +22,8 @@ def edit_college():
             "college_name": data_college['college_name'],
         }
     else:
-        # Handle the case where no student data was found
-        flash("College not found.", "error")
+        # Handle the case where no college data was found
+        flash("College info cannot be edited.", "error")
         return redirect(url_for("college.college_display"))
 
     if request.method == "POST" and form.validate():
@@ -33,7 +33,7 @@ def edit_college():
             flash("College information updated successfully!", "success")
             return redirect(url_for("college.college_display"))
         else:
-            flash("Failed to update student information.", "error")
+            flash("Failed to update college information.", "error")
 
     return render_template("edit_college.html", form=form, row=college_data_dict)
 
@@ -58,10 +58,10 @@ def add_college():
     
     if request.method == 'POST' and form.validate():
         check_college_code = form.college_code.data
-        student_exists = college_models.College.unique_code(check_college_code)
+        college_exists = college_models.College.unique_code(check_college_code)
 
-        if student_exists:
-            flash("Student already exists! Please enter a unique id_number", 'error')
+        if college_exists:
+            flash("College already exists! Please enter a unique code", 'error')
         else:
             college = college_models.College(
                 college_code=check_college_code,
@@ -75,8 +75,19 @@ def add_college():
 
 
 @college_bp.route('/college/search', methods=['POST'])
-def search_college():    
-    query = request.form.get('search_query')
-    college_data = college_models.College.search(query)
-    return render_template('college.html', headings=headings, data=college_data)
+def search_college():
+    try:
+        search_query = request.form.get('searchTerm')  # Updated to 'searchTerm'
+        search_results = college_models.College.search_college(search_query)
+        
+        if search_results:
+            flash("We found it!", 'success')
+        else:
+            flash("We could not find it!", 'error')
+
+        return jsonify(search_results)
+
+    except Exception as e:
+        # Handle errors and return an error response
+        return jsonify(error=str(e)), 500
 
