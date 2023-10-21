@@ -53,19 +53,19 @@ def delete_college():
 
 
 @college_bp.route('/college/add', methods=['POST', 'GET'])
-def add_college():
+def add():
     form = CollegeForm(request.form)
     
     if request.method == 'POST' and form.validate():
-        check_college_code = form.college_code.data
-        college_exists = college_models.College.unique_code(check_college_code)
+        check_code = form.college_code.data
+        student_exists = college_models.College.unique_code(check_code)
 
-        if college_exists:
+        if student_exists:
             flash("College already exists! Please enter a unique code", 'error')
         else:
             college = college_models.College(
-                college_code=check_college_code,
-                college_name=form.college_name.data
+                college_code=check_code,
+                college_name=form.college_name.data,
             )
             college.add()
             flash("College added successfully!", 'success')
