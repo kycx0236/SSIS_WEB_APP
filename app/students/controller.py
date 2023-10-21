@@ -95,9 +95,17 @@ def add():
 def search_student():
     try:
         search_query = request.form.get('searchTerm')  # Updated to 'searchTerm'
-        # Perform a database query based on the search_query
         search_results = student_models.Students.search_student(search_query)
+        
+        if search_results:
+            flash("We found it!", 'success')
+        else:
+            flash("We could not find it!", 'error')
+
         return jsonify(search_results)
+
     except Exception as e:
         # Handle errors and return an error response
         return jsonify(error=str(e)), 500
+
+

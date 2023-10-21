@@ -115,8 +115,8 @@ class Students:
     def search_student(cls, query):
         try:
             with mysql.connection.cursor() as cursor:
-                sql = "SELECT * FROM students WHERE id_number = %s OR first_name LIKE %s OR last_name LIKE %s OR course_code LIKE %s OR year_ = %s OR gender = %s"
-                cursor.execute(sql, (query, f"%{query}%", f"%{query}%", f"%{query}%", query, query))
+                sql = "SELECT * FROM students WHERE id_number = %s OR first_name = %s OR last_name LIKE %s OR course_code LIKE %s OR year_ = %s OR gender = %s"
+                cursor.execute(sql, (query, query, f"%{query}%", f"%{query}%", query, query))
                 result = cursor.fetchall()
                 return result
         except Exception as e:

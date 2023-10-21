@@ -68,8 +68,8 @@
             <label for="validationCustom05" class="form-label">Gender</label>
             <select class="form-select" id="validationCustom05" name="gender" required>
                 <option selected disabled value="">Choose...</option>
-                <option value="M" {% if row.gender == 'M' %} selected {% endif %}>M</option>
-                <option value="F" {% if row.gender == 'F' %} selected {% endif %}>F</option>
+                <option value="Male" {% if row.gender == 'Male' %} selected {% endif %}>Male</option>
+                <option value="Female" {% if row.gender == 'Female' %} selected {% endif %}>Female</option>
                 <option value="Others" {% if row.gender == 'Others' %} selected {% endif %}>Others</option>
             </select>
             <div class="invalid-feedback">

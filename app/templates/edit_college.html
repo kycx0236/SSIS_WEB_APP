@@ -1,81 +1,37 @@
 {% extends 'base.html' %}
 {% block title %}
-   Edit Student Page
+   Edit College Info
 {% endblock %}
 
 {% block content %}
 <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
-    <h1>EDIT STUDENT INFO</h1>
+    <h1>EDIT COLLEGE INFO</h1>
     <br/><br/>
-    <form class="row g-3 needs-validation" method="POST" action="{{ url_for('students.edit_student', id_number=row.id_number) }}" novalidate>
+    <form class="row g-3 needs-validation" method="POST" action="{{ url_for('college.edit_student', college_code=row.college_code) }}" novalidate>
         <!-- Include the ID number as part of the action URL -->
-        <!-- ID Number -->
+        <!-- College Code -->
         <div class="col-md-4">
-            <label for="validationCustom01" class="form-label">ID Number</label>
-            <input type="text" placeholder="YYYY-NNNN" class="form-control" id="validationCustom01" name="id_number" required value="{{ row.id_number }}" readonly>
+            <label for="validationCustom01" class="form-label">College Code</label>
+            <input type="text" placeholder="e.g., College of Computer Science" class="form-control" id="validationCustom01" name="college_code" required value="{{ row.college_code }}" readonly>
             <div class="valid-feedback">
                 Looks good!
             </div>
             <div class="invalid-feedback">
-                Please enter your ID Number.
+                Please enter your College Code.
             </div>
         </div>
         <!-- First Name -->
         <div class="col-md-4">
             <label for="validationCustom02" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="validationCustom02" name="first_name" required value="{{ row.first_name }}">
+            <input type="text" class="form-control" id="validationCustom02" name="college_name" required value="{{ row.college_name }}">
             <div class="valid-feedback">
                 Looks good!
             </div>
             <div class="invalid-feedback">
-                Please enter your First Name.
+                Please enter your College Name.
             </div>
         </div>
-        <!-- Last Name -->
-        <div class="col-md-4">
-            <label for="validationCustomUsername" class="form-label">Last Name</label>
-            <div class="input-group has-validation">
-                <input type="text" class="form-control" id="validationCustomUsername" name="last_name" required value="{{ row.last_name }}">
-                <div class="invalid-feedback">
-                    Please enter your Last Name.
-                </div>
-            </div>
-        </div>
-        <!-- Course Code -->
-        <div class="col-md-4">
-            <label for="validationCustom03" class="form-label">Course Code</label>
-            <input type="text" placeholder="e.g., BSCS" class="form-control" id="validationCustom03" name="course_code" required value="{{ row.course_code }}">
-            <div class="invalid-feedback">
-                Please provide your Course Code.
-            </div>
-        </div>
-        <!-- Year -->
-        <div class="col-md-4">
-            <label for="validationCustom04" class="form-label">Year</label>
-            <select class="form-select" id="validationCustom04" name="year_" required>
-                <option selected disabled value="">Choose...</option>
-                <option value="1" {% if row.year_ == '1' %} selected {% endif %}>1</option>
-                <option value="2" {% if row.year_ == '2' %} selected {% endif %}>2</option>
-                <option value="3" {% if row.year_ == '3' %} selected {% endif %}>3</option>
-                <option value="4" {% if row.year_ == '4' %} selected {% endif %}>4</option>
-            </select>
-            <div class="invalid-feedback">
-                Please select your Year.
-            </div>
-        </div>
-        <!-- Gender -->
-        <div class="col-md-4">
-            <label for="validationCustom05" class="form-label">Gender</label>
-            <select class="form-select" id="validationCustom05" name="gender" required>
-                <option selected disabled value="">Choose...</option>
-                <option value="M" {% if row.gender == 'M' %} selected {% endif %}>M</option>
-                <option value="F" {% if row.gender == 'F' %} selected {% endif %}>F</option>
-                <option value="Others" {% if row.gender == 'Others' %} selected {% endif %}>Others</option>
-            </select>
-            <div class="invalid-feedback">
-                Please select your Gender.
-            </div>
-        </div>
+        
         <br/><br/>
         <!-- Checkbox for input validation -->
         <div class="col-12">
@@ -94,7 +50,7 @@
             <!-- Add the CSRF token input here -->
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <!-- Include a hidden input for student id_number to update the correct student -->
-            <input type="hidden" name="student_id" value="{{ row.id_number }}">
+            <input type="hidden" name="student_id" value="{{ row.college_code }}">
             <button class="btn btn-outline-dark" type="submit">Submit</button>
         </div>
     </form>

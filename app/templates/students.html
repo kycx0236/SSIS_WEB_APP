@@ -12,6 +12,7 @@
     {% endfor %}
 
 <body>
+    <div id="flashMessage"></div>
     <form class="d-flex" role="search">
         <input id="search-input" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         <button id="search-button" class="btn btn-outline-success spaced-button search-button" type="button">Search</button>
@@ -78,7 +79,34 @@
         $("#add-student-button").click(function() {
             window.location.href = "/students/add";
         });
+        
+        $('#searchForm').submit(function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/students/search',
+                data: $('#searchForm').serialize(),
+                success: function (response) {
+                    // Display flash messages dynamically
+                    if (response.success) {
+                        displayFlashMessage(response.success, 'success');
+                    } else {
+                        displayFlashMessage(response.error, 'error');
+                    }
+                }
+            });
+        });
 
+        function displayFlashMessage(message, type) {
+            // Create a Bootstrap alert element
+            var alert = $('<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">' +
+                         '<strong>' + message + '</strong>' +
+                         '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                         '</div>');
+        
+            // Append the alert to the flashMessage div
+            $('#flashMessage').empty().append(alert);
+        }        
         // Modify the event listener for the delete button using event delegation
         $(document).on("click", ".delete-button", function() {
             const studentId = $(this).data("id");
@@ -190,6 +218,7 @@
                 $("tbody").append(newRow);
             }
         }
+
     });
 </script>
 
