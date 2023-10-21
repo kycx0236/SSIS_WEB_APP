@@ -45,7 +45,7 @@ def delete_college():
         if college_models.College.delete(college_code):
             return jsonify(success=True, message="Successfully deleted")
         else:
-            return jsonify(success=False, message="Failed")
+            return jsonify(success=False, message="Failed since there are enrolled students")
     except Exception as e:
         # Log the error for debugging purposes
         college_bp.logger.error("An error occurred: %s" % str(e))

@@ -7,7 +7,7 @@
 <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
     <h1>EDIT COLLEGE INFO</h1>
     <br/><br/>
-    <form class="row g-3 needs-validation" method="POST" action="{{ url_for('college.edit_student', college_code=row.college_code) }}" novalidate>
+    <form class="row g-3 needs-validation" method="POST" action="{{ url_for('college.edit_college', college_code=row.college_code) }}" novalidate>
         <!-- Include the ID number as part of the action URL -->
         <!-- College Code -->
         <div class="col-md-4">
@@ -21,7 +21,7 @@
             </div>
         </div>
         <!-- First Name -->
-        <div class="col-md-4">
+        <div class="col-md-8">
             <label for="validationCustom02" class="form-label">First Name</label>
             <input type="text" class="form-control" id="validationCustom02" name="college_name" required value="{{ row.college_name }}">
             <div class="valid-feedback">
@@ -49,8 +49,8 @@
         <div class="col-12">
             <!-- Add the CSRF token input here -->
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <!-- Include a hidden input for student id_number to update the correct student -->
-            <input type="hidden" name="student_id" value="{{ row.college_code }}">
+            <!-- Include a hidden input for college college_name to update the correct college -->
+            <input type="hidden" name="college_code" value="{{ row.college_code }}">
             <button class="btn btn-outline-dark" type="submit">Submit</button>
         </div>
     </form>

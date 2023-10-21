@@ -36,7 +36,7 @@
                         <td> {{ row[0] }} </td>
                         <td> {{ row[1] }} </td>
                         <td class="table__cell">
-                            <a href="{{ url_for('college.edit_college', id_number=row[0]) }}" class="btn btn-warning">Edit</a>
+                            <a href="{{ url_for('college.edit_college', college_code=row[0]) }}" class="btn btn-warning">Edit</a>
                             <button type="button" class="btn btn-danger delete-button" data-id="{{ row[0] }}">Delete</button>
                         </td>
                     </tr>
@@ -72,7 +72,7 @@
     $(document).ready(function() {
         // Add a click event listener to the "Add" button
         $("#add-college-button").click(function() {
-            window.location.href = "/college/college/add";
+            window.location.href = "/college/add";
         });
 
         // Modify the event listener for the delete button using event delegation
@@ -96,7 +96,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/college/college/delete",
+                url: "/college/delete",
                 headers: {
                     "X-CSRFToken": "{{ csrf_token() }}", // Include the CSRF token in the headers
                 },
@@ -119,10 +119,10 @@
 
         $(document).on("click", ".edit-college-button", function() {
             // Get the code of the college associated with the clicked "Edit" button
-            const collegeId = $(this).closest("tr").find("td:first-child").text(); // Assuming the ID is in the first <td> of the row
+            const collegeId = $(this).closest("tr").find("td:first-child").text(); // Assuming the college is in the first <code> of the row
         
             // Redirect to the edit page with the college ID
-            window.location.href = "/college/edit?college_code=" + collegeId;
+            window.location.href = "/edit?college_code=" + collegeId;
         });        
 
         $("#search-button").click(function() {
@@ -131,7 +131,7 @@
             // Make an AJAX request to the search endpoint
             $.ajax({
                 type: "POST",
-                url: "/college/college/search",
+                url: "/college/search",
                 headers: {
                     "X-CSRFToken": "{{ csrf_token() }}", // Include the CSRF token in the headers
                 },
