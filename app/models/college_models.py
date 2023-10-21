@@ -1,8 +1,8 @@
-import logging
+# import logging
 from app import mysql
 
 # Configure the logger
-logging.basicConfig(filename='app_errors.log', level=logging.ERROR)
+# logging.basicConfig(filename='app_errors.log', level=logging.ERROR)
 
 class College:
     def __init__(self, college_code=None, college_name=None):
