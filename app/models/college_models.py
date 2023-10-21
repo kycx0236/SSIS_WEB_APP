@@ -82,17 +82,9 @@ class College:
         return code
     
     @classmethod
-    def unique_code(cls, college_code):
-        cursor = mysql.connection.cursor()
-        cursor.execute("SELECT college_code FROM college WHERE college_code = %s", (college_code,))
-        code = cursor.fetchone()  # Use fetchone() to get a single result
-        cursor.close()
-        return code
-    
-    @classmethod
     def get_college_id(cls, college_code):
         cursor = mysql.connection.cursor(dictionary=True)  # Set dictionary=True to return results as dictionaries
         cursor.execute("SELECT * FROM college WHERE college_code = %s", (college_code,))
-        student_data = cursor.fetchone()
+        college_data = cursor.fetchone()
         cursor.close()
-        return student_data
+        return college_data

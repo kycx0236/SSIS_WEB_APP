@@ -91,10 +91,13 @@ def add():
     
     return render_template('add_student.html', form=form)
 
-
 @student_bp.route('/students/search', methods=['POST'])
-def search_students():    
-    query = request.form.get('search_query')
-    student_data = student_models.Students.search(query)
-    return render_template('students.html', headings=headings, data=student_data)
-
+def search_student():
+    try:
+        search_query = request.form.get('searchTerm')  # Updated to 'searchTerm'
+        # Perform a database query based on the search_query
+        search_results = student_models.Students.search_student(search_query)
+        return jsonify(search_results)
+    except Exception as e:
+        # Handle errors and return an error response
+        return jsonify(error=str(e)), 500

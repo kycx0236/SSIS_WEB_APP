@@ -13,8 +13,8 @@
 
 <body>
     <form class="d-flex" role="search">
-        <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success spaced-button search-button" type="submit">Search</button>
+        <input id="search-input" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button id="search-button" class="btn btn-outline-success spaced-button search-button" type="button">Search</button>
         <div class="mx-2"></div>
         <button class="btn btn-outline-warning spaced-button add-button" type="button" id="add-student-button">Add</button>
     </form>
@@ -79,11 +79,11 @@
             window.location.href = "/students/add";
         });
 
-        // Add a click event listener to the "Delete" button to show the confirmation modal
-        $(".delete-button").click(function() {
+        // Modify the event listener for the delete button using event delegation
+        $(document).on("click", ".delete-button", function() {
             const studentId = $(this).data("id");
             console.log("Button clicked with ID: " + studentId);
-            
+
             // Set the data-id attribute of the confirm delete button in the modal
             $("#confirmDeleteButton").data("id", studentId);
 
@@ -102,14 +102,14 @@
                 type: "POST",
                 url: "/students/delete",
                 headers: {
-                    "X-CSRFToken": "{{ csrf_token() }}",  // Include the CSRF token in the headers
+                    "X-CSRFToken": "{{ csrf_token() }}", // Include the CSRF token in the headers
                 },
                 data: { id_number: studentId },
                 success: function(response) {
                     console.log("Delete request successful");
                     if (response.success) {
                         alert("Successfully deleted");
-                        window.location.reload();  // Refresh the page after a successful delete
+                        window.location.reload(); // Refresh the page after a successful delete
                     } else {
                         alert("Failed to delete");
                     }
@@ -120,7 +120,78 @@
                 }
             });
         });
+
+        $(document).on("click", ".edit-student-button", function() {
+            // Get the ID of the student associated with the clicked "Edit" button
+            const studentId = $(this).closest("tr").find("td:first-child").text(); // Assuming the ID is in the first <td> of the row
+        
+            // Redirect to the edit page with the student ID
+            window.location.href = "/students/edit?id_number=" + studentId;
+        });        
+
+        $("#search-button").click(function() {
+            const searchTerm = $("#search-input").val(); // Get the search term from the input field
+
+            // Make an AJAX request to the search endpoint
+            $.ajax({
+                type: "POST",
+                url: "/students/search", // Use the relative URL
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token() }}", // Include the CSRF token in the headers
+                },
+                data: { searchTerm: searchTerm }, // Send the search term as data
+                success: function(response) {
+                    // Check if the response is an array before calling updateTable
+                    if (Array.isArray(response)) {
+                        updateTable(response);
+                    } else {
+                        console.error("Invalid response format. Expected an array.");
+                        alert("Invalid response format. Please check the server response.");
+                    }
+                },
+                error: function() {
+                    console.error("Error while making the search request");
+                    alert("Error while making the search request");
+                }
+            });
+        });
+
+        function updateTable(data) {
+            console.log("Response received:", data);
+
+            // Clear the existing table rows
+            $("tbody").empty();
+
+            // Loop through the data and add new rows to the table
+            for (let row of data) {
+                console.log("Row data:", row); // Log each row's data
+
+                // Create a new row and append it to the table
+                let newRow = $("<tr class='table__row'></tr>");
+                newRow.append("<td>" + row[0] + "</td>");
+                newRow.append("<td>" + row[1] + "</td>");
+                newRow.append("<td>" + row[2] + "</td>");
+                newRow.append("<td>" + row[3] + "</td>");
+                newRow.append("<td>" + row[4] + "</td>");
+                newRow.append("<td>" + row[5] + "</td>");
+
+                // Create the buttons
+                let editButton = $("<button type='button' class='btn btn-warning edit-student-button'>Edit</button>");
+                let deleteButton = $("<button type='button' class='btn btn-danger delete-button' data-id='" + row[0] + "'>Delete</button>");
+
+                // Create a cell for the buttons and append them
+                let buttonCell = $("<td class='table__cell'></td>");
+                buttonCell.append(editButton);
+                buttonCell.append("&nbsp;"); // Add a space between buttons
+                buttonCell.append(deleteButton);
+
+                newRow.append(buttonCell);
+
+                $("tbody").append(newRow);
+            }
+        }
     });
 </script>
 
+  
 {% endblock %}

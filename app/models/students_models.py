@@ -94,29 +94,6 @@ class Students:
             # You might want to log this error for debugging purposes
             print(f"Error updating student: {e}")
             return False
-
-
-    @classmethod
-    def search(cls, query):
-        """
-        Search for students by ID number, first name, last name, course code, year, or gender.
-
-        Args:
-            query (str): The search query.
-
-        Returns:
-            list: List of students (as dictionaries) that match the query.
-        """
-        try:
-            cursor = mysql.connection.cursor()
-            sql = "SELECT * FROM students WHERE id_number LIKE %s OR first_name LIKE %s OR last_name LIKE %s OR course_code LIKE %s OR year_ LIKE %s OR gender LIKE %s"
-            cursor.execute(sql, (f"%{query}%", f"%{query}%", f"%{query}%", f"%{query}%", f"%{query}%", f"%{query}%"))
-            result = cursor.fetchall()
-            return result
-        except Exception as e:
-            # You might want to log this error for debugging purposes
-            print(f"Error searching for students: {e}")
-            return []
         
     @classmethod
     def unique_code(cls, id_number):
@@ -133,6 +110,18 @@ class Students:
         student_data = cursor.fetchone()
         cursor.close()
         return student_data
+
+    @classmethod
+    def search_student(cls, query):
+        try:
+            with mysql.connection.cursor() as cursor:
+                sql = "SELECT * FROM students WHERE id_number = %s OR first_name LIKE %s OR last_name LIKE %s OR course_code LIKE %s OR year_ = %s OR gender = %s"
+                cursor.execute(sql, (query, f"%{query}%", f"%{query}%", f"%{query}%", query, query))
+                result = cursor.fetchall()
+                return result
+        except Exception as e:
+            print(f"Error: {e}")
+            return []
 
 
     
