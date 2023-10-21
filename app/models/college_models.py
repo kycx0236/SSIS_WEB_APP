@@ -18,7 +18,7 @@ class College:
             return True
         except Exception as e:
             # Log the error for debugging purposes
-            logging.error(f"Error adding student: {e}")
+            # logging.error(f"Error adding student: {e}")
             return False
 
     @classmethod
