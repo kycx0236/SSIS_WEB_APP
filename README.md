@@ -8,6 +8,7 @@ Key Features:
 User-Friendly Dashboard:
 
 An intuitive and clean interface that allows easy navigation and quick access to essential features.
+
 Student Profiles:
 
 Create, update, and maintain detailed profiles for each student, including personal information, contact details, and academic records.
