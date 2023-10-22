@@ -122,7 +122,7 @@
             const collegeId = $(this).closest("tr").find("td:first-child").text(); // Assuming the college is in the first <code> of the row
         
             // Redirect to the edit page with the college ID
-            window.location.href = "/edit?college_code=" + collegeId;
+            window.location.href = "/college/edit?college_code=" + collegeId;
         });        
 
         $("#search-button").click(function() {

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-    Student Page
+    Course Page
 {% endblock %}
 
 {% block content %}
@@ -16,7 +16,7 @@
         <input id="search-input" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         <button id="search-button" class="btn btn-outline-success spaced-button search-button" type="button">Search</button>
         <div class="mx-2"></div>
-        <button class="btn btn-outline-warning spaced-button add-button" type="button" id="add-student-button">Add</button>
+        <button class="btn btn-outline-warning spaced-button add-button" type="button" id="add-course-button">Add</button>
     </form>
     <br/>
     <div class="table-container" style="height: 500px; overflow: auto">
@@ -36,11 +36,8 @@
                         <td> {{ row[0] }} </td>
                         <td> {{ row[1] }} </td>
                         <td> {{ row[2] }} </td>
-                        <td> {{ row[3] }} </td>
-                        <td> {{ row[4] }} </td>
-                        <td> {{ row[5] }} </td>
                         <td class="table__cell">
-                            <a href="{{ url_for('students.edit_student', id_number=row[0]) }}" class="btn btn-warning">Edit</a>
+                            <a href="{{ url_for('courses.edit_courses', course_code=row[0]) }}" class="btn btn-warning">Edit</a>
                             <button type="button" class="btn btn-danger delete-button" data-id="{{ row[0] }}">Delete</button>
                         </td>
                     </tr>
@@ -59,7 +56,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete this student?
+                Are you sure you want to delete this info?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -75,17 +72,17 @@
 <script>
     $(document).ready(function() {
         // Add a click event listener to the "Add" button
-        $("#add-student-button").click(function() {
-            window.location.href = "/students/add";
+        $("#add-course-button").click(function() {
+            window.location.href = "/course/add";
         });
 
         // Modify the event listener for the delete button using event delegation
         $(document).on("click", ".delete-button", function() {
-            const studentId = $(this).data("id");
-            console.log("Button clicked with ID: " + studentId);
+            const courseID = $(this).data("id");
+            console.log("Button clicked with ID: " + courseID);
 
             // Set the data-id attribute of the confirm delete button in the modal
-            $("#confirmDeleteButton").data("id", studentId);
+            $("#confirmDeleteButton").data("id", courseID);
 
             // Show the confirmation modal
             $("#deleteConfirmationModal").modal('show');
@@ -93,18 +90,18 @@
 
         // Add a click event listener to the confirm delete button in the modal
         $("#confirmDeleteButton").click(function() {
-            const studentId = $(this).data("id");
+            const courseID = $(this).data("id");
 
             // Close the modal
             $("#deleteConfirmationModal").modal('hide');
 
             $.ajax({
                 type: "POST",
-                url: "/students/delete",
+                url: "/course/delete",
                 headers: {
                     "X-CSRFToken": "{{ csrf_token() }}", // Include the CSRF token in the headers
                 },
-                data: { id_number: studentId },
+                data: { course_code: courseID },
                 success: function(response) {
                     console.log("Delete request successful");
                     if (response.success) {
@@ -121,27 +118,26 @@
             });
         });
 
-        $(document).on("click", ".edit-student-button", function() {
-            // Get the ID of the student associated with the clicked "Edit" button
-            const studentId = $(this).closest("tr").find("td:first-child").text(); // Assuming the ID is in the first <td> of the row
+        $(document).on("click", ".edit-course-button", function() {
+            // Get the code of the course associated with the clicked "Edit" button
+            const courseID = $(this).closest("tr").find("td:first-child").text(); // Assuming the course is in the first <code> of the row
         
-            // Redirect to the edit page with the student ID
-            window.location.href = "/students/edit?id_number=" + studentId;
+            // Redirect to the edit page with the course_code
+            window.location.href = "/course/edit?course_code=" + courseID;
         });        
 
         $("#search-button").click(function() {
             const searchTerm = $("#search-input").val(); // Get the search term from the input field
-
+        
             // Make an AJAX request to the search endpoint
             $.ajax({
                 type: "POST",
-                url: "/students/search", // Use the relative URL
+                url: "/course/search",
                 headers: {
                     "X-CSRFToken": "{{ csrf_token() }}", // Include the CSRF token in the headers
                 },
-                data: { searchTerm: searchTerm }, // Send the search term as data
+                data: { searchTerm: searchTerm },
                 success: function(response) {
-                    // Check if the response is an array before calling updateTable
                     if (Array.isArray(response)) {
                         updateTable(response);
                     } else {
@@ -149,12 +145,13 @@
                         alert("Invalid response format. Please check the server response.");
                     }
                 },
-                error: function() {
-                    console.error("Error while making the search request");
-                    alert("Error while making the search request");
+                error: function(xhr, textStatus, errorThrown) {
+                    console.error("Error while making the search request:", textStatus, errorThrown);
+                    alert("Error while making the search request. Please check the server response.");
                 }
             });
         });
+        
 
         function updateTable(data) {
             console.log("Response received:", data);
@@ -171,12 +168,9 @@
                 newRow.append("<td>" + row[0] + "</td>");
                 newRow.append("<td>" + row[1] + "</td>");
                 newRow.append("<td>" + row[2] + "</td>");
-                newRow.append("<td>" + row[3] + "</td>");
-                newRow.append("<td>" + row[4] + "</td>");
-                newRow.append("<td>" + row[5] + "</td>");
 
                 // Create the buttons
-                let editButton = $("<button type='button' class='btn btn-warning edit-student-button'>Edit</button>");
+                let editButton = $("<button type='button' class='btn btn-warning edit-course-button'>Edit</button>");
                 let deleteButton = $("<button type='button' class='btn btn-danger delete-button' data-id='" + row[0] + "'>Delete</button>");
 
                 // Create a cell for the buttons and append them

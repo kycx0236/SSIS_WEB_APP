@@ -26,10 +26,10 @@ def create_app(test_config=None):
     
     from .college import college_bp as college_bluprint
     app.register_blueprint(college_bluprint)
-    """
-    from .courses import courses_bp
-    app.register_blueprint(courses_bp, url_prefix='/courses')
-    """
+
+    from .courses import courses_bp as courses_bluprint
+    app.register_blueprint(courses_bluprint)
+
     bootstrap.init_app(app)
     mysql.init_app(app)
 

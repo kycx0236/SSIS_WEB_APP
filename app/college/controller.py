@@ -19,7 +19,7 @@ def edit_college():
     if data_college:
         college_data_dict = {
             "college_code": data_college['college_code'],
-            "college_name": data_college['college_name'],
+            "college_name": data_college['college_name']
         }
     else:
         # Handle the case where no college data was found

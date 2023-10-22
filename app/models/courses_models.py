@@ -14,7 +14,8 @@ class Courses:
             mysql.connection.commit()
             return True
         except Exception as e:
-            print(f"Error adding course: {e}")
+            # You might want to log this error for debugging purposes
+            print(f"Error adding courses info: {e}")
             return False
 
     @classmethod
@@ -26,7 +27,8 @@ class Courses:
             result = cursor.fetchall()
             return result
         except Exception as e:
-            print(f"Error fetching all courses: {e}")
+            # You might want to log this error for debugging purposes
+            print(f"Error fetching all course info: {e}")
             return []
 
     @classmethod
@@ -40,7 +42,7 @@ class Courses:
         except Exception as e:
             print(f"Error deleting course: {e}")
             return False
-
+    
     @classmethod
     def update(cls, course_code, new_course_name, new_college_code):
         try:
@@ -50,25 +52,39 @@ class Courses:
             mysql.connection.commit()
             return True
         except Exception as e:
-            print(f"Error updating course: {e}")
+            print(f"Error updating courses: {e}")
             return False
+        
+    @classmethod
+    def unique_code(cls, course_code):
+        try:
+            cursor = mysql.connection.cursor()
+            cursor.execute("SELECT course_code FROM courses WHERE course_code = %s", (course_code,))
+            code = cursor.fetchone()
+            return code is not None  # Return True if the course code exists, otherwise False
+        except Exception as e:
+            print(f"Error checking unique course code: {e}")
+            return False
+        finally:
+            cursor.close()
+
+    
+    @classmethod
+    def get_course_code(cls, course_code):
+        cursor = mysql.connection.cursor(dictionary=True)  # Set dictionary=True to return results as dictionaries
+        cursor.execute("SELECT * FROM courses WHERE course_code = %s", (course_code,))
+        course_data = cursor.fetchone()
+        cursor.close()
+        return course_data
 
     @classmethod
     def search(cls, query):
         try:
-            cursor = mysql.connection.cursor()
-            sql = "SELECT * FROM courses WHERE course_code LIKE %s OR course_name LIKE %s OR college_code LIKE %s"
-            cursor.execute(sql, (f"%{query}%", f"%{query}%", f"%{query}%"))
-            result = cursor.fetchall()
-            return result
+            with mysql.connection.cursor() as cursor:
+                sql = "SELECT * FROM courses WHERE course_code = %s OR course_name = %s OR college_code = %s"
+                cursor.execute(sql, (query, query, query))
+                result = cursor.fetchall()
+                return result
         except Exception as e:
-            print(f"Error searching for courses: {e}")
+            print(f"Error: {e}")
             return []
-
-    @classmethod
-    def unique_code(cls, course_code):
-        cursor = mysql.connection.cursor()
-        cursor.execute("SELECT course_code FROM courses WHERE course_code = %s", (course_code,))
-        code = cursor.fetchone()  # Use fetchone() to get a single result
-        cursor.close()
-        return code
