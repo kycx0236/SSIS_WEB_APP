@@ -86,12 +86,6 @@ def search_course():
     try:
         search_query = request.form.get('searchTerm')  # Updated to 'searchTerm'
         search_results = courses_models.Courses.search(search_query)
-        
-        if search_results:
-            flash("We found it!", 'success')
-        else:
-            flash("We could not find it!", 'error')
-
         return jsonify(search_results)
 
     except Exception as e:

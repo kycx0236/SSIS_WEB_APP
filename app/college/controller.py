@@ -80,11 +80,6 @@ def search_college():
     try:
         search_query = request.form.get('searchTerm')  # Updated to 'searchTerm'
         search_results = college_models.College.search(search_query)
-        
-        if search_results:
-            flash("We found it!", 'success')
-        else:
-            flash("We could not find it!", 'error')
 
         return jsonify(search_results)
 
