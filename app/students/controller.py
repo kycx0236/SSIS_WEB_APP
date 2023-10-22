@@ -19,6 +19,7 @@ def edit_student():
     id_number = request.args.get('id_number')
     form = StudentForm()
     student_data = student_models.Students.get_student_by_id(id_number)
+    all_courses = student_models.Students.get_all_courses()
 
     if student_data:
         # Ensure that student_data is not empty before accessing elements
@@ -48,7 +49,7 @@ def edit_student():
         else:
             flash("Failed to update student information.", "error")
 
-    return render_template("edit_student.html", form=form, row=student_data_dict)
+    return render_template("edit_student.html", form=form, row=student_data_dict, courses=all_courses)
 
 
 @student_bp.route("/students/delete", methods=["POST"])
@@ -67,6 +68,7 @@ def delete_students():
 @student_bp.route('/students/add', methods=['POST', 'GET'])
 def add():
     form = StudentForm(request.form)
+    all_courses = student_models.Students.get_all_courses()
     
     if request.method == 'POST' and form.validate():
         check_id = form.id_number.data
@@ -87,7 +89,7 @@ def add():
             flash("Student added successfully!", 'success')
             return redirect(url_for('students.students'))
     
-    return render_template('add_student.html', form=form)
+    return render_template('add_student.html', form=form, courses=all_courses)
 
 @student_bp.route('/students/search', methods=['POST'])
 def search_student():

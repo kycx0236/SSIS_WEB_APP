@@ -38,16 +38,22 @@ Add Courses Data
                     Please enter Course Name.
                 </div>
             </div>
-            <!-- College Code -->
+            <!-- College Code -->   
             <div class="col-md-4">
                 <label for="validationCustom03" class="form-label">College Code</label>
-                <div class="input-group has-validation">
-                    <input type="text" placeholder="e.g., CCS" class="form-control" id="validationCustom03" name="college_code" required>
-                    <div class="invalid-feedback">
-                        Please enter your College Code.
-                    </div>
+                <select class="form-select" id="validationCustom03" name="college_code" required>
+                    <option value="" selected>Select a college code</option>
+                    {% for college in colleges %}
+                        <option value="{{ college.college_code }}">{{ college.college_code }}</option>
+                    {% endfor %}
+                </select>
+                <div class="valid-feedback">
+                    Looks good!
                 </div>
-            </div>
+                <div class="invalid-feedback">
+                    Please select a college code.
+                </div>
+            </div>            
             <br/><br/>
             <!-- Checkbox for input validation -->
             <div class="col-12">

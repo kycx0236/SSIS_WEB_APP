@@ -15,6 +15,7 @@ def edit_courses():
     course_code = request.args.get('course_code')
     form = CourseForm()
     course_data = courses_models.Courses.get_course_code(course_code)
+    college_code = courses_models.Courses.get_college_codes()
 
     if course_data:
         course_data_dict = {
@@ -37,7 +38,7 @@ def edit_courses():
         else:
             flash("Failed to update course information.", "error")
             
-    return render_template("edit_course.html", form=form, row=course_data_dict)
+    return render_template("edit_course.html", form=form, row=course_data_dict, colleges=college_code)
 
 
 @courses_bp.route("/course/delete", methods=["POST"])
@@ -57,6 +58,7 @@ def delete_course():
 @courses_bp.route('/course/add', methods=['POST', 'GET'])
 def add_course():
     form = CourseForm(request.form)
+    college_code = courses_models.Courses.get_college_codes()
     
     if request.method == 'POST' and form.validate():
         check_code = form.course_code.data
@@ -76,7 +78,7 @@ def add_course():
             else:
                 flash("Failed to add the course. Please check your inputs.", 'error')
     
-    return render_template('add_courses.html', form=form)
+    return render_template('add_courses.html', form=form, colleges=college_code)
 
 
 @courses_bp.route('/course/search', methods=['POST'])

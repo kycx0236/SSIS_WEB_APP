@@ -43,10 +43,18 @@
         </div>
         <!-- Course Code -->
         <div class="col-md-4">
-            <label for="validationCustom03" class="form-label">Course Code</label>
-            <input type="text" placeholder="e.g., BSCS" class="form-control" id="validationCustom03" name="course_code" required value="{{ row.course_code }}">
+            <label for="validationCustom3" class="form-label">Course Code</label>
+            <select class="form-select" id="validationCustom03" name="course_code" required>
+                <option value="" selected>Select a course</option>
+                {% for course in courses %}
+                    <option value="{{ course.course_code }}">{{ course.course_code }}</option>
+                {% endfor %}
+            </select>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
             <div class="invalid-feedback">
-                Please provide your Course Code.
+                Please select a course.
             </div>
         </div>
         <!-- Year -->
