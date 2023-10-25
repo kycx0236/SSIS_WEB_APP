@@ -84,10 +84,17 @@ def add_course():
 @courses_bp.route('/course/search', methods=['POST'])
 def search_course():
     try:
-        search_query = request.form.get('searchTerm')  # Updated to 'searchTerm'
-        search_results = courses_models.Courses.search(search_query)
+        search_query = request.form.get('searchTerm')
+        filter_by = request.form.get('filterBy')  # Get the filterBy parameter
+        
+        if filter_by == 'all':
+            # If filterBy is 'all', perform a general search
+            search_results = courses_models.Courses.search(search_query)
+        else:
+            # Otherwise, filter based on the selected column
+            search_results = courses_models.Courses.filter_course(filter_by, search_query)
+            
         return jsonify(search_results)
-
     except Exception as e:
         # Handle errors and return an error response
         return jsonify(error=str(e)), 500

@@ -100,3 +100,19 @@ class Courses:
         except Exception as e:
             print(f"Error obtaining college_codes: {e}")
             return False
+    
+    @classmethod
+    def filter_course(cls, filter_by, query):
+        try:
+            with mysql.connection.cursor() as cursor:
+                # Construct the SQL query based on the selected column
+                columns = ["course_code", "course_name", "college_code"]
+                if filter_by not in columns:
+                    raise ValueError("Invalid filter column")
+                sql = f"SELECT * FROM courses WHERE {filter_by} = %s"
+                cursor.execute(sql, (query,))
+                result = cursor.fetchall()
+                return result
+        except Exception as e:
+            print(f"Error: {e}")
+            return []

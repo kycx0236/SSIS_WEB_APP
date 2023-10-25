@@ -79,11 +79,19 @@ def add_college():
 def search_college():
     try:
         search_query = request.form.get('searchTerm')  # Updated to 'searchTerm'
-        search_results = college_models.College.search(search_query)
+        filter_by = request.form.get('filterBy')  # Get the filterBy parameter
+        
+        if filter_by == 'all':
+            search_results = college_models.College.search(search_query)
+        
+        else: 
+            search_results = college_models.College.filter_college(filter_by, search_query)
 
         return jsonify(search_results)
 
     except Exception as e:
         # Handle errors and return an error response
         return jsonify(error=str(e)), 500
+
+
 

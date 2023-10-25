@@ -90,15 +90,21 @@ def add():
             return redirect(url_for('students.students'))
     
     return render_template('add_student.html', form=form, courses=all_courses)
-
+    
 @student_bp.route('/students/search', methods=['POST'])
 def search_student():
     try:
         search_query = request.form.get('searchTerm')
-        search_results = student_models.Students.search_student(search_query)
-
+        filter_by = request.form.get('filterBy')  # Get the filterBy parameter
+        
+        if filter_by == 'all':
+            # If filterBy is 'all', perform a general search
+            search_results = student_models.Students.search_student(search_query)
+        else:
+            # Otherwise, filter based on the selected column
+            search_results = student_models.Students.filter_student(filter_by, search_query)
+            
         return jsonify(search_results)
-
     except Exception as e:
         # Handle errors and return an error response
         return jsonify(error=str(e)), 500
