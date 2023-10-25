@@ -54,7 +54,7 @@
             <select class="form-select" id="validationCustom03" name="course_code" required>
                 <option value="" selected>Select a course</option>
                 {% for course in courses %}
-                    <option value="{{ course.course_code }}">{{ course.course_code }}</option>
+                <option value="{{ course.course_code }}" {% if row.course_code == course.course_code %} selected {% endif %}>{{ course.course_code }}</option>
                 {% endfor %}
             </select>
             <div class="valid-feedback">
@@ -65,14 +65,15 @@
             </div>
         </div>
         <!-- Year -->
+        <!-- Year -->
         <div class="col-md-4">
             <label for="validationCustom04" class="form-label">Year</label>
             <select class="form-select" id="validationCustom04" name="year_" required>
                 <option selected disabled value="">Choose...</option>
-                <option value="1" {% if row.year_ == '1' %} selected {% endif %}>1</option>
-                <option value="2" {% if row.year_ == '2' %} selected {% endif %}>2</option>
-                <option value="3" {% if row.year_ == '3' %} selected {% endif %}>3</option>
-                <option value="4" {% if row.year_ == '4' %} selected {% endif %}>4</option>
+                <option value="1" {% if row.year_ == '1' or row.year_ == 1 %} selected {% endif %}>1</option>
+                <option value="2" {% if row.year_ == '2' or row.year_ == 2 %} selected {% endif %}>2</option>
+                <option value="3" {% if row.year_ == '3' or row.year_ == 3 %} selected {% endif %}>3</option>
+                <option value="4" {% if row.year_ == '4' or row.year_ == 4 %} selected {% endif %}>4</option>
             </select>
             <div class="invalid-feedback">
                 Please select your Year.
