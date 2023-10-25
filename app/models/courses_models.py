@@ -82,7 +82,9 @@ class Courses:
         try:
             with mysql.connection.cursor() as cursor:
                 sql = "SELECT * FROM courses WHERE course_code = %s OR course_name = %s OR college_code = %s"
+                # sql = "SELECT * FROM courses WHERE course_code LIKE %s OR course_name LIKE %s OR college_code LIKE %s"
                 cursor.execute(sql, (query, query, query))
+                # cursor.execute(sql, (f'%{query}%', f'%{query}%', f'%{query}%'))
                 result = cursor.fetchall()
                 return result
         except Exception as e:
