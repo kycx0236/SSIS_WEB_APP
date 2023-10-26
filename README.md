@@ -1,7 +1,7 @@
-Title: Student Information Hub
+Title: Simple Student Information System
 
 Description:
-The Student Information Hub is a user-friendly web application designed to streamline and enhance the management of student data for educational institutions. This simple and efficient web app is tailored to meet the specific needs of teachers, administrators, and students themselves. Whether you're an educator, an administrator, or a student, this application offers a comprehensive set of features that make managing and accessing student information a breeze.
+This is a user-friendly web application designed to streamline and enhance the management of student data for educational institutions. Whether you're an educator, an administrator, or a student, this application offers a comprehensive set of features that make managing and accessing student information a breeze.
 
 Key Features:
 
