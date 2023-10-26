@@ -109,25 +109,47 @@ class Students:
     def search_student(cls, query):
         try:
             with mysql.connection.cursor() as cursor:
-                sql = "SELECT * FROM students WHERE id_number = %s OR first_name = %s OR last_name = %s OR course_code = %s OR year_ = %s OR gender = %s"
-                # sql = "SELECT * FROM students WHERE id_number LIKE %s OR first_name LIKE %s OR last_name LIKE %s OR course_code LIKE %s OR year_ LIKE %s OR gender LIKE %s"
-                cursor.execute(sql, (query, query, query, query, query, query))
-                # cursor.execute(sql, ( f'%{query}%',  f'%{query}%',  f'%{query}%',  f'%{query}%',  f'%{query}%',  f'%{query}%'))
+                sql = """
+                    SELECT students.id_number, students.first_name, students.last_name, students.course_code, courses.college_code, students.year_, students.gender
+                    FROM students
+                    JOIN courses ON students.course_code = courses.course_code
+                    WHERE students.id_number = %s
+                    OR students.first_name = %s
+                    OR students.last_name = %s
+                    OR students.course_code = %s
+                    OR courses.college_code = %s
+                    OR students.year_ = %s
+                    OR students.gender = %s
+                """
+                cursor.execute(sql, (query, query, query, query, query, query, query))
                 result = cursor.fetchall()
                 return result
         except Exception as e:
             print(f"Error: {e}")
             return []
-    
+
     @classmethod
     def filter_student(cls, filter_by, query):
         try:
             with mysql.connection.cursor() as cursor:
                 # Construct the SQL query based on the selected column
-                columns = ["id_number", "first_name", "last_name", "course_code", "year_", "gender"]
+                columns = ["id_number", "first_name", "last_name", "course_code", "college_code", "year_", "gender"]
                 if filter_by not in columns:
                     raise ValueError("Invalid filter column")
-                sql = f"SELECT * FROM students WHERE {filter_by} = %s"
+                if filter_by == "college_code":
+                    sql = f"""
+                        SELECT students.id_number, students.first_name, students.last_name, students.course_code, courses.college_code, students.year_, students.gender
+                        FROM students
+                        JOIN courses ON students.course_code = courses.course_code
+                        WHERE courses.college_code = %s
+                    """
+                else:
+                    sql = f"""
+                        SELECT students.id_number, students.first_name, students.last_name, students.course_code, courses.college_code, students.year_, students.gender
+                        FROM students
+                        JOIN courses ON students.course_code = courses.course_code
+                        WHERE students.{filter_by} = %s
+                    """
                 cursor.execute(sql, (query,))
                 result = cursor.fetchall()
                 return result

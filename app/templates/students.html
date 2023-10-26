@@ -215,41 +215,39 @@
         });
 
         function updateTable(data) {
-            console.log("Response received:", data);
-
             // Clear the existing table rows
             $("tbody").empty();
-
+        
             // Loop through the data and add new rows to the table
             for (let row of data) {
                 console.log("Row data:", row); // Log each row's data
-
+        
                 // Create a new row and append it to the table
                 let newRow = $("<tr class='table__row'></tr>");
-                newRow.append("<td>" + row[0] + "</td>");
-                newRow.append("<td>" + row[1] + "</td>");
-                newRow.append("<td>" + row[2] + "</td>");
-                newRow.append("<td>" + row[3] + "</td>");
-                newRow.append("<td>" + row[4] + "</td>");
-                newRow.append("<td>" + row[5] + "</td>");
-                newRow.append("<td>" + row[6] + "</td>");
-
+                newRow.append("<td>" + row[0] + "</td>"); // Assuming id_number is in your data
+                newRow.append("<td>" + row[1] + "</td>"); // Assuming first_name is in your data
+                newRow.append("<td>" + row[2] + "</td>"); // Assuming last_name is in your data
+                newRow.append("<td>" + row[3] + "</td>"); // Assuming course_code is in your data
+                newRow.append("<td>" + row[4] + "</td>"); // Assuming college_code is in your data
+                newRow.append("<td>" + row[5] + "</td>"); // Assuming year_ is in your data
+                newRow.append("<td>" + row[6] + "</td>"); // Assuming gender is in your data
+        
                 // Create the buttons
                 let editButton = $("<button type='button' class='btn btn-warning edit-student-button'>Edit</button>");
-                let deleteButton = $("<button type='button' class='btn btn-danger delete-button' data-id='" + row[0] + "'>Delete</button>");
-
+                let deleteButton = $("<button type='button' class='btn btn-danger delete-button' data-id='" + row.id_number + "'>Delete</button>");
+        
                 // Create a cell for the buttons and append them
                 let buttonCell = $("<td class='table__cell'></td>");
                 buttonCell.append(editButton);
                 buttonCell.append("&nbsp;"); // Add a space between buttons
                 buttonCell.append(deleteButton);
-
+        
                 newRow.append(buttonCell);
-
+        
                 $("tbody").append(newRow);
             }
         }
-
+        
     });
 </script>
 
