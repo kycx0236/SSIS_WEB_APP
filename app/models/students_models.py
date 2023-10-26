@@ -146,5 +146,21 @@ class Students:
         except Exception as e:
             print(f"Error obtaining course_code: {e}")
             return False
-
-    
+        
+    @classmethod
+    def get_all_colleges(cls, id_number):
+        try:
+            cursor = mysql.connection.cursor(dictionary=True)
+            cursor.execute("""
+                SELECT courses.college_code 
+                FROM courses
+                JOIN students
+                ON students.course_code = courses.course_code
+                WHERE id_number = %s
+            """, (id_number,))
+            all_colleges = cursor.fetchall()
+            cursor.close()
+            return all_colleges
+        except Exception as e:
+            print(f"Error obtaining college_code: {e}")
+            return False

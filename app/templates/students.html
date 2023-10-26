@@ -28,6 +28,7 @@
             <option value="first_name">First Name</option>
             <option value="last_name">Last Name</option>
             <option value="course_code">Course Code</option>
+            <option value="college_name">College Code</option>
             <option value="year_">Year</option>
             <option value="gender">Gender</option>
             <!-- Add more options as needed -->
@@ -52,8 +53,9 @@
                         <td> {{ row[1] }} </td>
                         <td> {{ row[2] }} </td>
                         <td> {{ row[3] }} </td>
-                        <td> {{ row[4] }} </td>
+                        <td> {{ row[4] }} </td>  <!-- This line displays the college code -->
                         <td> {{ row[5] }} </td>
+                        <td> {{ row[6] }} </td>
                         <td class="table__cell">
                             <a href="{{ url_for('students.edit_student', id_number=row[0]) }}" class="btn btn-warning">Edit</a>
                             <button type="button" class="btn btn-danger delete-button" data-id="{{ row[0] }}">Delete</button>
