@@ -36,6 +36,8 @@ body {
     border-collapse: separate;
     border-spacing: 0px;
     width: 100%; /* Add this to make the table full-width */
+    border-radius: 500px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .table-header {
@@ -60,6 +62,7 @@ table th {
     text-align: center;
     font-weight: bold;
     font-size: 18px;
+    padding: 10px;
 }
 
 
@@ -103,15 +106,15 @@ table td {
     font-weight: bold;
   }
   
-  .alert-success {
+.alert-success {
     background-color: #eff4af; /* Green background for success message */
   }
   
-  .alert-error {
+.alert-error {
     background-color: #DC3545; /* Red background for error message */
   }
   
-  /* Style the close button (if needed) */
-  #popup .btn-close {
+/* Style the close button (if needed) */
+#popup .btn-close {
     color: white;
   }
