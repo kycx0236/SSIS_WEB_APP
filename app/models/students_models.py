@@ -1,7 +1,9 @@
 from app import mysql
+import re
 
 class Students:
-    def __init__(self, id_number=None, first_name=None, last_name=None, course_code=None, year_=None, gender=None):
+    def __init__(self, profile_pic=None, id_number=None, first_name=None, last_name=None, course_code=None, year_=None, gender=None):
+        self.profile_pic = profile_pic
         self.id_number = id_number
         self.first_name = first_name
         self.last_name = last_name
@@ -23,15 +25,9 @@ class Students:
 
     @classmethod
     def all(cls):
-        """
-        Retrieve all students from the database.
-
-        Returns:
-            list: List of students (as dictionaries).
-        """
         try:
             cursor = mysql.connection.cursor()
-            sql = "SELECT * FROM students"
+            sql = "SELECT students.id_number, students.first_name, students.last_name, students.course_code, students.year_, students.gender FROM students"
             cursor.execute(sql)
             result = cursor.fetchall()
             return result
@@ -42,15 +38,6 @@ class Students:
 
     @classmethod
     def delete(cls, id_number):
-        """
-        Delete a student from the database.
-
-        Args:
-            id_number (str): The ID number of the student to be deleted.
-
-        Returns:
-            bool: True if the deletion was successful, False otherwise.
-        """
         try:
             cursor = mysql.connection.cursor()
             sql = "DELETE FROM students WHERE id_number = %s"
@@ -64,20 +51,6 @@ class Students:
 
     @classmethod
     def update(cls, id_number, new_first_name, new_last_name, new_course_code, new_year_, new_gender):
-        """
-        Update the student's information in the database.
-
-        Args:
-            id_number (str): The ID number of the student to be updated.
-            new_first_name (str): The new first name.
-            new_last_name (str): The new last name.
-            new_course_code (str): The new course code.
-            new_year_ (int): The new year.
-            new_gender (str): The new gender.
-
-        Returns:
-            bool: True if the update was successful, False otherwise.
-        """
         try:
             cursor = mysql.connection.cursor()
             sql = "UPDATE students SET first_name = %s, last_name = %s, course_code = %s, year_ = %s, gender = %s WHERE id_number = %s"

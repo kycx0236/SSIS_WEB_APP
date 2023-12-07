@@ -2,6 +2,10 @@ from flask import render_template, redirect, request, flash, url_for, jsonify
 from . import student_bp
 import app.models.students_models as student_models
 from app.students.forms import StudentForm
+from wtforms import ValidationError
+from cloudinary import uploader
+from cloudinary.uploader import upload
+from cloudinary.utils import cloudinary_url
 
 headings = ("ID_Number", "First Name", "Last Name", "Course Code", "College Code", "Year", "Gender", "Actions")
 
@@ -83,28 +87,40 @@ def delete_students():
 
 @student_bp.route('/students/add', methods=['POST', 'GET'])
 def add():
-    form = StudentForm(request.form)
+    form = StudentForm()
     all_courses = student_models.Students.get_all_courses()
-    
-    if request.method == 'POST' and form.validate():
-        check_id = form.id_number.data
-        student_exists = student_models.Students.unique_code(check_id)
 
-        if student_exists:
-            flash("Student already exists! Please enter a unique id_number", 'error')
-        else:
-            student = student_models.Students(
-                id_number=check_id,
-                first_name=form.first_name.data,
-                last_name=form.last_name.data,
-                course_code=form.course_code.data,
-                year_=form.year_.data,
-                gender=form.gender.data
-            )
-            student.add()
-            flash("Student added successfully!", 'success')
-            return redirect(url_for('students.students'))
-    
+    if request.method == 'POST' and form.validate_on_submit():
+        try:
+            profile_pic = request.files['profile_pic']    
+            check_id = form.id_number.data
+            student_exists = student_models.Students.unique_code(check_id)
+
+            if student_exists:
+                flash("Student already exists! Please enter a unique id_number", 'error')
+            else:
+                if profile_pic:
+                    upload_result = upload(profile_pic, folder="SSIS", resource_type='image')
+                    secure_url = upload_result['secure_url']
+                else:
+                    secure_url = None
+                student = student_models.Students(
+                    secure_url,
+                    id_number=check_id,
+                    first_name=form.first_name.data,
+                    last_name=form.last_name.data,
+                    course_code=form.course_code.data,
+                    year_=form.year_.data,
+                    gender=form.gender.data
+                )
+                student.add()
+                print("Student added successfully and profile photo has been uploaded")
+                flash("Student added successfully!", 'success')
+                return redirect(url_for('students.students'))
+
+        except ValidationError as e:
+            flash(str(e), 'error')
+
     return render_template('add_student.html', form=form, courses=all_courses)
     
 @student_bp.route('/students/search', methods=['POST'])
