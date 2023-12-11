@@ -11,9 +11,8 @@ class StudentForm(FlaskForm):
     year_ = StringField('year_', [Length(min=1, max=50)])
     gender = StringField('gender', [Length(min=1, max=50)])
     profile_pic = FileField('Profile Picture', validators=[
-        DataRequired('Please upload a file.'),
         FileAllowed(['jpg', 'jpeg', 'png'], 'Only JPEG and PNG images are allowed!')
-    ], render_kw={'accept': 'image/*', 'required': True})
+    ], render_kw={'accept': 'image/*'})
     submit = SubmitField("Submit")
 
     def validate_id_number(form, field):

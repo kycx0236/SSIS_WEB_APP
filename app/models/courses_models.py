@@ -78,13 +78,19 @@ class Courses:
         return course_data
 
     @classmethod
-    def search(cls, query):
+    def search_course(cls, query):
         try:
             with mysql.connection.cursor() as cursor:
-                sql = "SELECT * FROM courses WHERE course_code = %s OR course_name = %s OR college_code = %s"
-                # sql = "SELECT * FROM courses WHERE course_code LIKE %s OR course_name LIKE %s OR college_code LIKE %s"
-                cursor.execute(sql, (query, query, query))
-                # cursor.execute(sql, (f'%{query}%', f'%{query}%', f'%{query}%'))
+                sql = """
+                    SELECT courses.course_code, courses.course_name, courses.college_code, college.college_name
+                    FROM courses
+                    LEFT JOIN college ON courses.college_code = college.college_code
+                    WHERE courses.course_code LIKE %s 
+                    OR courses.course_name LIKE %s 
+                    OR courses.college_code LIKE %s 
+                    OR college.college_name LIKE %s
+                """
+                cursor.execute(sql, (f"%{query}%", f"%{query}%", f"%{query}%", f"%{query}%"))
                 result = cursor.fetchall()
                 return result
         except Exception as e:
@@ -108,13 +114,53 @@ class Courses:
         try:
             with mysql.connection.cursor() as cursor:
                 # Construct the SQL query based on the selected column
-                columns = ["course_code", "course_name", "college_code"]
+                columns = ["course_code", "course_name", "college_code", "college_name"]
                 if filter_by not in columns:
                     raise ValueError("Invalid filter column")
-                sql = f"SELECT * FROM courses WHERE {filter_by} = %s"
+                sql = f"""
+                    SELECT courses.course_code, courses.course_name, courses.college_code, college.college_name
+                    FROM courses
+                    LEFT JOIN college ON courses.college_code = college.college_code
+                    WHERE {filter_by} = %s
+                """
                 cursor.execute(sql, (query,))
                 result = cursor.fetchall()
                 return result
         except Exception as e:
             print(f"Error: {e}")
+            return []
+    
+    @classmethod
+    def get_all_colleges(cls, course_code):
+        try:
+            cursor = mysql.connection.cursor(dictionary=True)
+            cursor.execute("""
+                SELECT college.college_name
+                FROM college
+                JOIN courses
+                ON courses.college_code = college.college_code
+                WHERE courses.college_code = %s
+            """, (course_code,))
+            all_colleges = cursor.fetchall()
+            cursor.close()
+            return all_colleges
+        except Exception as e:
+            print(f"Error obtaining college_code: {e}")
+            return False
+        
+
+    @classmethod
+    def get_all_courses_with_colleges(cls):
+        try:
+            cursor = mysql.connection.cursor(dictionary=True)
+            cursor.execute("""
+                SELECT courses.course_code, courses.course_name, courses.college_code, college.college_name
+                FROM courses
+                JOIN college ON courses.college_code = college.college_code
+            """)
+            all_courses = cursor.fetchall()
+            cursor.close()
+            return all_courses
+        except Exception as e:
+            print(f"Error obtaining courses with colleges: {e}")
             return []

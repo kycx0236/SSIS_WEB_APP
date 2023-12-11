@@ -39,13 +39,13 @@
 
             <!-- Last Name -->
             <div class="col-md-4">
-                <label for="validationCustomUsername" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="validationCustomUsername" name="last_name" required>
+                <label for="validationCustom03" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="validationCustom03" name="last_name" required>
             </div>
             <!-- Course Code -->
             <div class="col-md-4">
-                <label for="validationCustom03" class="form-label">Course Code</label>
-                <select class="form-select" id="validationCustom03" name="course_code" required>
+                <label for="validationCustom04" class="form-label">Course Code</label>
+                <select class="form-select" id="validationCustom04" name="course_code" required>
                     <option value="" selected>Select a course</option>
                     {% for course in courses %}
                         <option value="{{ course.course_code }}">{{ course.course_code }}</option>
@@ -54,8 +54,8 @@
             </div>                        
             <!-- Year -->
             <div class="col-md-4">
-                <label for="validationCustom04" class="form-label">Year</label>
-                <select class="form-select" id="validationCustom04" name="year_" required>
+                <label for="5" class="form-label">Year</label>
+                <select class="form-select" id="validationCustom05" name="year_" required>
                     <option selected disabled value="">Choose...</option>
                     <option>1</option>
                     <option>2</option>
@@ -65,8 +65,8 @@
             </div>
             <!-- Gender -->
             <div class="col-md-4">
-                <label for="validationCustom05" class="form-label">Gender</label>
-                <select class="form-select" id="validationCustom05" name="gender" required>
+                <label for="validationCustom07" class="form-label">Gender</label>
+                <select class="form-select" id="validationCustom07" name="gender" required>
                     <option selected disabled value="">Choose...</option>
                     <option>Male</option>
                     <option>Female</option>
@@ -78,8 +78,8 @@
             <div class="col-md-4">
                 {{ form.profile_pic.label(for="validationCustom06", class="form-label", name = "profile_pic") }} </br>
                 {{ form.profile_pic(id="validationCustom06", class="form-control-file", accept=".jpg, .jpeg, .png", required=True) }}
+                <div id="image-preview-container" style="margin-top: 10px;"></div>
             </div>
-
 
             <div class="col-12">
             </br></br>
@@ -159,14 +159,65 @@
                 }
             });
     
-            // Additional validation for file upload
+            document.addEventListener("DOMContentLoaded", function () {
+                // Select the form and the file input
+                const form = document.querySelector('.needs-validation');
+                const fileInput = document.getElementById('validationCustom06');
+        
+                // Add a submit event listener to the form
+                form.addEventListener('submit', function (event) {
+                    // Check if the file input has a selected file
+                    if (fileInput.required && fileInput.files.length === 0) {
+                        // Prevent form submission
+                        event.preventDefault();
+                        event.stopPropagation();
+        
+                        // Display an alert or perform any action you prefer
+                        alert('Please select a profile picture.');
+                    }
+                });
+            });
+            
+            // Additional validation for file upload and image preview
             $('#validationCustom06').on('input', function () {
+                const maxFileSizeMB = 1; // Maximum file size allowed in MB
+
                 if (this.files.length > 0) {
-                    this.setCustomValidity('');
+                    const fileSizeMB = this.files[0].size / (1024 * 1024); // Convert bytes to MB
+                    if (fileSizeMB > maxFileSizeMB) {
+                        // File size exceeds the limit, show an alert
+                        alert('Please upload a picture less than ' + maxFileSizeMB + 'MB.');
+                        this.value = ''; // Clear the file input
+                        return; // Exit the function without setting custom validity
+                    } else {
+                        this.setCustomValidity('');
+                        // Display image preview
+                        displayImagePreview(this.files[0]);
+                    }
                 } else {
                     this.setCustomValidity('Please upload a file.');
+                    // Clear image preview
+                    $('#image-preview-container').empty();
+                    // Alert the user to upload a photo
+                    alert('Please upload a photo.');
                 }
             });
+
+            // Function to display image preview
+            const displayImagePreview = (file) => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const imagePreview = $('<img>').attr({
+                        src: e.target.result,
+                        alt: 'Image Preview',
+                        class: 'img-thumbnail',
+                        style: 'max-width: 100%;'
+                    });
+                    $('#image-preview-container').html(imagePreview);
+                };
+                reader.readAsDataURL(file);
+            };
+
     
             // Example starter JavaScript for disabling form submissions if there are invalid fields
             $('.needs-validation').submit(function (event) {

@@ -3,16 +3,38 @@ from . import courses_bp
 import app.models.courses_models as courses_models
 from app.courses.forms import CourseForm
 
-headings = ("Course Code", "Course Name", "College Code", "Options")
+headings = ("Course Code", "Course Name", "College Code", "College Name", "Options")
 
 @courses_bp.route("/course/display")
 def course_display():
-    course_data = courses_models.Courses.all()
-    return render_template('courses.html', headings=headings, data=course_data)
+    course_data = courses_models.Courses.get_all_courses_with_colleges()
+
+    # Check if course_data is not empty
+    if course_data:
+        # Initialize an empty list to store dictionaries
+        course_data_dict_list = []
+
+        # Iterate through each dictionary in the list
+        for course in course_data:
+            # Create a new dictionary with keys and values
+            course_dict = {
+                "course_code": course['course_code'],
+                "course_name": course['course_name'],
+                "college_code": course['college_code'],
+                "college_name": course['college_name']
+            }
+            # Append the new dictionary to the list
+            course_data_dict_list.append(course_dict)
+
+        return render_template('courses.html', headings=headings, data=course_data_dict_list)
+    else:
+        # Handle the case when course_data is empty
+        return render_template('courses.html', headings=headings, data=[])
 
 @courses_bp.route('/course/edit', methods=["GET", "POST"])
 def edit_courses():
     course_code = request.args.get('course_code')
+    print(course_code)
     form = CourseForm()
     course_data = courses_models.Courses.get_course_code(course_code)
     college_code = courses_models.Courses.get_college_codes()
@@ -89,7 +111,7 @@ def search_course():
         
         if filter_by == 'all':
             # If filterBy is 'all', perform a general search
-            search_results = courses_models.Courses.search(search_query)
+            search_results = courses_models.Courses.search_course(search_query)
         else:
             # Otherwise, filter based on the selected column
             search_results = courses_models.Courses.filter_course(filter_by, search_query)

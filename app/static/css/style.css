@@ -117,4 +117,52 @@ table td {
 /* Style the close button (if needed) */
 #popup .btn-close {
     color: white;
-  }
+ }
+/* General styling for all labels */
+label {
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Styling for subheaders */
+.info-subheader {
+    padding-bottom: 20px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* Styling for regular text */
+.info-text {
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left; /* Align info-text to the left */
+}
+
+/* Styling for details */
+.info-detail {
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: left; /* Align info-detail to the left */
+}
+
+/* Divide into three parts using CSS Grid */
+.modal-body.view {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+/* Set width and add padding for each section */
+.student_details,
+.course_details,
+.college_details {
+    width: 100%;
+    padding: 60px;
+    box-sizing: border-box;
+}
+
+/* Style the info-pair container */
+.info-pair {
+    margin-bottom: 10px; /* Add margin between each info-pair */
+}
+
+
