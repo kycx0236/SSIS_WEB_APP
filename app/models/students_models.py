@@ -19,19 +19,23 @@ class Students:
     @classmethod
     def add(cls, id_number, first_name, last_name, course_code, year_, gender, profile_pic):
         try:
-            # Upload image to Cloudinary
-            upload_result = cloudinary.uploader.upload(profile_pic, folder="SSIS", resource_type='image')
-            profile_pic_url = upload_result['secure_url']
+            with mysql.connection.cursor() as cursor:
+                if profile_pic:
+                    upload_result = cloudinary.uploader.upload(profile_pic, folder="SSIS", resource_type='image')
+                    profile_pic_url = upload_result['secure_url']
 
-            cursor = mysql.connection.cursor()
-            sql = "INSERT INTO students (id_number, first_name, last_name, course_code, year_, gender, profile_pic) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-            cursor.execute(sql, (id_number, first_name, last_name, course_code, year_, gender, profile_pic_url))
+                    sql = "INSERT INTO students (id_number, first_name, last_name, course_code, year_, gender, profile_pic) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                    cursor.execute(sql, (id_number, first_name, last_name, course_code, year_, gender, profile_pic_url))
+                else:
+                    sql = "INSERT INTO students (id_number, first_name, last_name, course_code, year_, gender) VALUES (%s, %s, %s, %s, %s, %s)"
+                    cursor.execute(sql, (id_number, first_name, last_name, course_code, year_, gender))
+
             mysql.connection.commit()
-
             return True
-        except Exception as e:
+        except mysql.connector.Error as e:
             print(f"Error adding student: {e}")
             return False
+
 
     @classmethod
     def all(cls):

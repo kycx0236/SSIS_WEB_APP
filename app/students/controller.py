@@ -156,10 +156,15 @@ def add():
                     ):
                         print("Student added successfully, and profile photo has been uploaded to Cloudinary")
                         flash("Student added successfully!", 'success')
-                    else:
-                        flash("Error adding student. Please try again.", 'error')
                 else:
-                    flash("Profile picture not provided.", 'error')
+                    student_models.Students.add(check_id,
+                        form.first_name.data,
+                        form.last_name.data,
+                        form.course_code.data,
+                        form.year_.data,
+                        form.gender.data,
+                        profile_pic=None)
+                    flash("Student added successfully!", 'success')
 
                 # Redirect to the students page or any other page
                 return redirect(url_for('students.students'))
